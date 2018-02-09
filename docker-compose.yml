@@ -1,0 +1,12 @@
+version: "3"
+services:
+  web:
+    restart: on-failure:10
+    build: .
+    command: sh /code/run.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:80"
+    env_file:
+      - env.dev

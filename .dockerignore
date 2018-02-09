@@ -1,0 +1,9 @@
+.gitignore
+deploy.sh
+docker-compose.*
+DockerFile
+env.dev
+release.sh
+requestments.dev.txt
+run.sh
+test.sh
