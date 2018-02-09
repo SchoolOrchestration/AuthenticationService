@@ -2,6 +2,18 @@
 
 Service for authenticating users against our user store and getting a token from Kong
 
+| Requirement   | Maturity      |
+| ------------- |:-------------:|
+| Deployment    | Staging       |
+| API Docs      | No            |
+| Test Coverage | Yes           |
+| Codacy        | No            |
+| CI            | Yes           |
+| Sentry        | No            |
+
+* Staging: https://kong-staging.vumatel.co.za/authentication/health/
+* Production: TBD
+
 # Getting started
 
 ## Run locally:

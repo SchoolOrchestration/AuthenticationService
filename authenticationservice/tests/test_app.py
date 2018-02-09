@@ -8,7 +8,6 @@ from authenticationservice.app import api
 def client():
     return testing.TestClient(api)
 
-
 def test_health_endpoint(client):
     response = client.simulate_get('/health')
     assert response.status == falcon.HTTP_OK
