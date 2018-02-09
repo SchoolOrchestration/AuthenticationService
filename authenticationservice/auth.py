@@ -21,8 +21,6 @@ class AuthenticationResource(object):
 #             "grant_type": "password",
 #             "provision_key": settings.KONG_PROVISION_KEY,
 #             "authenticated_userid": user.id,
-#             "username": username,
-#             "password": password
 #         }
 #         url = "{}/oauth2/token".format(base_url)
 #         result = requests.post(url, data, verify=False)
