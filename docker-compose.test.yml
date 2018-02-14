@@ -4,3 +4,6 @@ services:
   sut:
     build: .
     command: sh test.sh
+    environment:
+      - KONG_BASE_URL=http://kong.com
+      - KONG_PROVISION_KEY=1234

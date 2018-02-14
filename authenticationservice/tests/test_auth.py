@@ -1,7 +1,9 @@
-import pytest, falcon, json, responses
+import os, pytest, falcon, json, responses
 from falcon import testing
 from authenticationservice.app import api
 from urllib.parse import urlencode
+
+kong_base_url = os.environ.get('KONG_BASE_URL')
 
 @pytest.fixture
 def client():
@@ -13,7 +15,7 @@ def test_login_success(client):
     # verify it makes a request to kong:
     responses.add(
         responses.POST,
-        url='http://kong-staging.vumatel.co.za/oauth2/token',
+        url='{}/oauth2/token'.format(kong_base_url),
         json={"token_type": "bearer", "access_token": "1234"},
         status=200
     )
@@ -37,7 +39,7 @@ def test_login_success_form_data(client):
     # verify it makes a request to kong:
     responses.add(
         responses.POST,
-        url='http://kong-staging.vumatel.co.za/oauth2/token',
+        url='{}/oauth2/token'.format(kong_base_url),
         json={"token_type": "bearer", "access_token": "1234"},
         status=200
     )
