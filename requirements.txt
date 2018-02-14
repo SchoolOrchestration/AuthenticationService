@@ -2,5 +2,9 @@ gunicorn==19.7.1
 requests>=2.13
 newrelic
 falcon
+jsonschema
+Jinja2
 
 pytest
+ipdb
+responses

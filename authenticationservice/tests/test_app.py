@@ -16,6 +16,6 @@ def test_get_auth_endpoint(client):
     response = client.simulate_get('/auth')
     assert response.status == falcon.HTTP_OK
 
-def test_post_auth_endpoint(client):
-    response = client.simulate_post('/auth')
-    assert response.status == falcon.HTTP_OK
+# def test_post_auth_endpoint(client):
+#     response = client.simulate_post('/auth')
+#     assert response.status == falcon.HTTP_OK

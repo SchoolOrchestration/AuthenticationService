@@ -1,7 +1,10 @@
 '''
 Authentication endpoints
 '''
-import json, falcon
+import json, falcon, os
+from . import BaseResource, validate
+from .schemas import load_schema
+from .helpers import authenticate, get_kong_token, status_string
 
 class AuthenticationResource(object):
 
@@ -9,27 +12,22 @@ class AuthenticationResource(object):
         resp.body = json.dumps({'todo': True}, ensure_ascii=False)
         resp.status = falcon.HTTP_200
 
-    def on_post(self, req, resp):
-        resp.body = json.dumps({'todo': True}, ensure_ascii=False)
-        resp.status = falcon.HTTP_200
+    @validate(load_schema('login'))
+    def on_post(self, req, resp, parsed):
+        username = parsed.get('username')
+        password = parsed.get('password')
+        client_id = parsed.get('client_id')
+        client_secret = parsed.get('client_secret')
 
-#     user = authenticate(request, username=username, password=password)
-#     if user is not None:
-#         data = {
-#             "client_id": client_id,
-#             "client_secret": client_secret, # testtest
-#             "grant_type": "password",
-#             "provision_key": settings.KONG_PROVISION_KEY,
-#             "authenticated_userid": user.id,
-#         }
-#         url = "{}/oauth2/token".format(base_url)
-#         result = requests.post(url, data, verify=False)
-#         status = result.status_code
-#         result = result.json()
-#     else:
-#         result = {
-#             'message': 'Authentication failed. Invalid username or password'
-#         }
-#         status = 401
+        user = authenticate(username=username, password=password)
 
-#     return JsonResponse(result, status=status)
+        if user is not None:
+            result = get_kong_token(client_id, client_secret, user.get('id'))
+            resp.body = json.dumps(result.json(), ensure_ascii=False)
+            resp.status = status_string(result.status_code)
+        else:
+            result = {
+                'message': 'Authentication failed. Invalid username or password'
+            }
+            resp.body = json.dumps(json.dumps(result), ensure_ascii=False)
+            resp.status = falcon.HTTP_403
