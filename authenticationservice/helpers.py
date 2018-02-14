@@ -1,7 +1,16 @@
-import requests, os, falcon
+import requests, os, falcon, json
+from urllib.parse import parse_qs
 
 def status_string(status_code):
     return getattr(falcon, 'HTTP_{}'.format(status_code))
+
+def get_data(req):
+    content_type = req.get_header('content_type')
+    body = req.stream.read()
+    if content_type == 'application/x-www-form-urlencoded':
+        return parse_qs(body)
+    else:
+        return json.loads(body.decode('utf-8'))
 
 def authenticate(username, password):
     '''

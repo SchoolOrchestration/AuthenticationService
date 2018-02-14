@@ -2,9 +2,10 @@
 Authentication endpoints
 '''
 import json, falcon, os
+from urllib.parse import parse_qs
 from . import BaseResource, validate
 from .schemas import load_schema
-from .helpers import authenticate, get_kong_token, status_string
+from .helpers import authenticate, get_kong_token, status_string, get_data
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 env = Environment(
@@ -24,8 +25,9 @@ class AuthenticationResource(object):
         resp.content_type = 'text/html'
         resp.status = falcon.HTTP_200
 
-    @validate(load_schema('login'))
-    def on_post(self, req, resp, parsed):
+    # @validate(load_schema('login'))
+    def on_post(self, req, resp):
+        parsed = get_data(req)
         username = parsed.get('username')
         password = parsed.get('password')
         client_id = parsed.get('client_id')
