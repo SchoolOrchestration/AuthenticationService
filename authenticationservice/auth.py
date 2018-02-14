@@ -6,10 +6,22 @@ from . import BaseResource, validate
 from .schemas import load_schema
 from .helpers import authenticate, get_kong_token, status_string
 
+from jinja2 import Environment, PackageLoader, select_autoescape
+env = Environment(
+    loader=PackageLoader('authenticationservice', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
+
+client_id = os.environ.get('APP_CLIENT_ID')
+client_password = os.environ.get('APP_CLIENT_SECRET')
+
 class AuthenticationResource(object):
 
     def on_get(self, req, resp):
-        resp.body = json.dumps({'todo': True}, ensure_ascii=False)
+
+        template = env.get_template('login.html')
+        resp.body = template.render()
+        resp.content_type = 'text/html'
         resp.status = falcon.HTTP_200
 
     @validate(load_schema('login'))

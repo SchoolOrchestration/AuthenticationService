@@ -4,6 +4,7 @@ newrelic
 falcon
 jsonschema
 Jinja2
+falcon-multipart
 
 pytest
 ipdb
