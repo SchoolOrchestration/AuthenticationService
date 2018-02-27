@@ -16,6 +16,7 @@ env = Environment(
 client_id = os.environ.get('APP_CLIENT_ID')
 client_password = os.environ.get('APP_CLIENT_SECRET')
 
+
 class AuthenticationResource(object):
 
     def on_get(self, req, resp):
@@ -26,13 +27,13 @@ class AuthenticationResource(object):
         resp.status = falcon.HTTP_200
 
     # @validate(load_schema('login'))
-    def on_post(self, req, resp):
+    @staticmethod
+    def on_post(req, resp):
         parsed = get_data(req)
         username = parsed.get('username')
         password = parsed.get('password')
         client_id = parsed.get('client_id')
         client_secret = parsed.get('client_secret')
-
         user = authenticate(username=username, password=password)
 
         if user is not None:
@@ -41,7 +42,8 @@ class AuthenticationResource(object):
             resp.status = status_string(result.status_code)
         else:
             result = {
-                'message': 'Authentication failed. Invalid username or password'
+                'message': ('Authentication failed. Invalid username '
+                            'or password')
             }
             resp.body = json.dumps(json.dumps(result), ensure_ascii=False)
             resp.status = falcon.HTTP_403

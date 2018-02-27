@@ -1,19 +1,22 @@
-'''
+"""
 Health endpoint
-'''
+"""
 import json, falcon
 
+
 def check_kong_is_ok():
-    '''TBD'''
+    """TBD"""
     return 'TBD'
+
 
 class HealthResource(object):
 
-    def on_get(self, req, resp):
+    @staticmethod
+    def on_get(req, resp):
         doc = {
             "status": {
                 "status": "OK",
-                "kong" : check_kong_is_ok(),
+                "kong": check_kong_is_ok(),
                 "version": "1"
             }
         }
