@@ -1,7 +1,11 @@
 import requests, os, falcon, json
 from urllib.parse import parse_qs
+import pickle
+import redis
+import json
 
 KONG_BASE_URL = os.environ.get('KONG_BASE_URL')
+REDIS_PERMISSION_HOST = os.environ.get('REDIS_PERMISSION_HOST')
 
 
 def status_string(status_code):
@@ -46,3 +50,16 @@ def get_kong_token(client_id, client_secret, user_id):
     }
     url = "{}/users/oauth2/token".format(base_url)
     return requests.post(url, data, verify=False)
+
+
+def push_groups_to_redis(user_id, groups, permissions=None):
+    """
+    Pushes a dict of user groups and permissions to a redis host
+    """
+    conn = redis.StrictRedis(REDIS_PERMISSION_HOST)
+    data = {
+        'groups': groups,
+        'permissions': permissions
+    }
+    p_data = pickle.dumps(data)
+    conn.set(user_id, p_data)

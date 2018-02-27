@@ -8,5 +8,10 @@ services:
       - .:/code
     ports:
       - "8000:80"
+    links:
+      - redis
     env_file:
       - env.dev
+
+  redis:
+    image: redis:alpine

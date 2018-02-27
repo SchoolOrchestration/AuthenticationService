@@ -1,11 +1,19 @@
 '''
 Authentication endpoints
 '''
-import json, falcon, os
 from urllib.parse import parse_qs
 from . import BaseResource, validate
 from .schemas import load_schema
-from .helpers import authenticate, get_kong_token, status_string, get_data
+from .helpers import (
+    push_groups_to_redis,
+    get_kong_token,
+    status_string,
+    authenticate,
+    get_data
+)
+import falcon
+import json
+import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 env = Environment(
@@ -13,8 +21,8 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-client_id = os.environ.get('APP_CLIENT_ID')
-client_password = os.environ.get('APP_CLIENT_SECRET')
+# client_id = os.environ.get('APP_CLIENT_ID')
+# client_password = os.environ.get('APP_CLIENT_SECRET')
 
 
 class AuthenticationResource(object):
@@ -40,6 +48,7 @@ class AuthenticationResource(object):
             result = get_kong_token(client_id, client_secret, user.get('id'))
             resp.body = json.dumps(result.json(), ensure_ascii=False)
             resp.status = status_string(result.status_code)
+            push_groups_to_redis(user['id'], user['teams'])
         else:
             result = {
                 'message': ('Authentication failed. Invalid username '

@@ -5,6 +5,7 @@ falcon
 jsonschema
 Jinja2
 falcon-multipart
+redis
 
 pytest
 ipdb

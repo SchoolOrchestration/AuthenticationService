@@ -1,9 +1,18 @@
-import os, pytest, falcon, json, responses
-from falcon import testing
 from authenticationservice.app import api
+from authenticationservice import helpers
 from urllib.parse import urlencode
+from unittest.mock import patch
+from falcon import testing
+import responses
+import pytest
+import pickle
+import redis
+import json
+import os
 
 kong_base_url = os.environ.get('KONG_BASE_URL')
+permissions = os.environ.get('REDIS_PERMISSION_HOST')
+redis_permission_host = os.environ.get('REDIS_PERMISSION_HOST')
 
 
 @pytest.fixture
@@ -15,6 +24,11 @@ def client():
 def test_login_success(client):
 
     # verify it makes a request to kong:
+    responses.add(
+        responses.POST,
+        url='permissions:6379'.format(kong_base_url),
+    )
+    user_id = 2
     responses.add(
         responses.POST,
         url='{}/users/oauth2/token'.format(kong_base_url),
@@ -31,7 +45,7 @@ def test_login_success(client):
         url='{}/users/login/'.format(kong_base_url),
         json={
             "username": "vumatel_admin",
-            "id": 2,
+            "id": user_id,
             "organization": "Vumatel",
             "teams": ["vumatel.admin"]
         },
@@ -42,13 +56,16 @@ def test_login_success(client):
         'username': 'vumatel_admin',
         'password': '2c3914ea-1779-496d-a6df-c068282b370c',
         'client_id': '9n5tWkjOfFOiiwchAJtXZ7vj7G5Qlw8G',
-        'client_secret': 'k2ypqY9emqMilO948I6ZYqNgrFPK5s6i',
+            'client_secret': 'k2ypqY9emqMilO948I6ZYqNgrFPK5s6i',
     }
     response = client.simulate_post(
                 '/auth',
                 body=json.dumps(data))
 
     assert response.status_code == 200
+    conn = redis.StrictRedis(redis_permission_host)
+    groups_and_permissions = pickle.loads(conn.get(user_id))
+    assert groups_and_permissions['gro  ups'] == ["vumatel.admin"]
 
 
 @responses.activate
