@@ -1,8 +1,9 @@
-import requests, os, falcon, json
 from urllib.parse import parse_qs
-import pickle
+import requests
+import falcon
 import redis
 import json
+import os
 
 KONG_BASE_URL = os.environ.get('KONG_BASE_URL')
 REDIS_PERMISSION_HOST = os.environ.get('REDIS_PERMISSION_HOST')
@@ -38,7 +39,9 @@ def authenticate(username, password):
 
 
 def get_kong_token(client_id, client_secret, user_id):
-
+    """
+    Gets a authentication token set from kong to pass back to client
+    """
     base_url = KONG_BASE_URL
     provision_key = os.environ.get('KONG_PROVISION_KEY')
     data = {
@@ -61,5 +64,5 @@ def push_groups_to_redis(user_id, groups, permissions=None):
         'groups': groups,
         'permissions': permissions
     }
-    p_data = pickle.dumps(data)
+    p_data = json.dumps(data)
     conn.set(user_id, p_data)

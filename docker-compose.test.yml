@@ -7,3 +7,5 @@ services:
     environment:
       - KONG_BASE_URL=http://kong.com
       - KONG_PROVISION_KEY=1234
+      - REDIS_PERMISSION_HOST=redis
+      - CODACY_PROJECT_TOKEN=41f3700d78814287af96b0b37243eb6a

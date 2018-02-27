@@ -8,5 +8,7 @@ falcon-multipart
 redis
 
 pytest
+codacy-coverage
 ipdb
 responses
+pytest-cov

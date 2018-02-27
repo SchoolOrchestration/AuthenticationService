@@ -64,8 +64,8 @@ def test_login_success(client):
 
     assert response.status_code == 200
     conn = redis.StrictRedis(redis_permission_host)
-    groups_and_permissions = pickle.loads(conn.get(user_id))
-    assert groups_and_permissions['gro  ups'] == ["vumatel.admin"]
+    groups_and_permissions = json.loads(conn.get(user_id))
+    assert groups_and_permissions['groups'] == ["vumatel.admin"]
 
 
 @responses.activate
