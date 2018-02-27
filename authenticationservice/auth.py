@@ -1,9 +1,9 @@
-'''
+"""
 Authentication endpoints
-'''
-from urllib.parse import parse_qs
-from . import BaseResource, validate
-from .schemas import load_schema
+"""
+# from urllib.parse import parse_qs
+# from . import BaseResource, validate
+# from .schemas import load_schema
 from .helpers import (
     push_groups_to_redis,
     get_kong_token,
@@ -13,7 +13,7 @@ from .helpers import (
 )
 import falcon
 import json
-import os
+# import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 env = Environment(

@@ -1,4 +1,5 @@
 FROM python:3.6
+MAINTAINER brendankamp757@gmail.com
 ENV PYTHONUNBUFFERED 1
 RUN mkdir -p /code
 WORKDIR /code

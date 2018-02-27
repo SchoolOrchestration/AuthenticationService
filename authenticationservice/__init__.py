@@ -1,10 +1,14 @@
-import falcon, json, jsonschema
+import jsonschema
+import falcon
+import json
+
 
 class BaseResource(object):
     def __init__(self, db_manager):
         self.db = db_manager
 
-    def format_body(self, data):
+    @staticmethod
+    def format_body(data):
         return json.dumps(data)
 
 
@@ -19,7 +23,6 @@ def validate(schema):
                     'Invalid data',
                     'Could not properly parse the provided data as JSON'
                 )
-
             try:
                 jsonschema.validate(obj, schema)
             except jsonschema.ValidationError as e:
@@ -27,7 +30,6 @@ def validate(schema):
                     'Failed data validation',
                     e.message
                 )
-
             return func(self, req, resp, *args, parsed=obj, **kwargs)
         return wrapper
     return decorator
