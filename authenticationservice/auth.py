@@ -49,7 +49,7 @@ class AuthenticationResource(object):
             result = get_kong_token(client_id, client_secret, user.get('id'))
             resp.body = json.dumps(result.json(), ensure_ascii=False)
             resp.status = status_string(result.status_code)
-            push_groups_to_redis(user['id'], user['teams'])
+            push_groups_to_redis(user['id'], user)
         else:
             result = {
                 'message': ('Authentication failed. Invalid username '

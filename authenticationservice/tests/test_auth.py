@@ -10,6 +10,24 @@ import os
 kong_base_url = os.environ.get('KONG_BASE_URL')
 permissions = os.environ.get('REDIS_PERMISSION_HOST')
 redis_permission_host = os.environ.get('REDIS_PERMISSION_HOST')
+MOCK_USERSERVICE_RESPONSE = {
+            'username': 'Natalie',
+            'id': 3,
+            'organizations': [
+                {
+                    'name': 'Organization',
+                    'id': 3,
+                    'groups': [
+                        {
+                            'name': 'organization.admin',
+                            'permissions': [
+                                {'name': 'all', 'code': 'code'}
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
 
 
 @pytest.fixture
@@ -25,7 +43,6 @@ def test_login_success(client):
         responses.POST,
         url='permissions:6379'.format(kong_base_url),
     )
-    user_id = 2
     responses.add(
         responses.POST,
         url='{}/users/oauth2/token'.format(kong_base_url),
@@ -40,12 +57,7 @@ def test_login_success(client):
     responses.add(
         responses.POST,
         url='{}/users/login/'.format(kong_base_url),
-        json={
-            "username": "vumatel_admin",
-            "id": user_id,
-            "organization": "Vumatel",
-            "teams": ["vumatel.admin"]
-        },
+        json=MOCK_USERSERVICE_RESPONSE,
         status=200
     )
 
@@ -61,8 +73,8 @@ def test_login_success(client):
 
     assert response.status_code == 200
     conn = redis.StrictRedis(redis_permission_host)
-    groups_and_permissions = json.loads(conn.get(user_id))
-    assert groups_and_permissions['groups'] == ["vumatel.admin"]
+    groups_and_permissions = json.loads(conn.get("user_{}".format(3)))
+    assert groups_and_permissions['organizations'] is not None
 
 
 @responses.activate
@@ -83,12 +95,7 @@ def test_login_success_form_data(client):
     responses.add(
         responses.POST,
         url='{}/users/login/'.format(kong_base_url),
-        json={
-            "username": "vumatel_admin",
-            "id": 2,
-            "organization": "Vumatel",
-            "teams": ["vumatel.admin"]
-        },
+        json=MOCK_USERSERVICE_RESPONSE,
         status=200
     )
 
