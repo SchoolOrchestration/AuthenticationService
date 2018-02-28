@@ -27,7 +27,8 @@ env = Environment(
 
 class AuthenticationResource(object):
 
-    def on_get(self, req, resp):
+    @staticmethod
+    def on_get(req, resp):
 
         template = env.get_template('login.html')
         resp.body = template.render()

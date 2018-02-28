@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
-pytest .
+py.test \
+--cov=authenticationservice \
+--cov-config .coveragerc \
+authenticationservice/tests/
+
+coverage xml
+python-codacy-coverage -r coverage.xml

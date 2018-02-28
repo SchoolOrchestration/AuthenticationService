@@ -1,11 +1,8 @@
 from authenticationservice.app import api
-from authenticationservice import helpers
 from urllib.parse import urlencode
-from unittest.mock import patch
 from falcon import testing
 import responses
 import pytest
-import pickle
 import redis
 import json
 import os
