@@ -61,4 +61,4 @@ def push_groups_to_redis(user_id, data):
     """
     conn = redis.StrictRedis(REDIS_PERMISSION_HOST)
     p_data = json.dumps(data)
-    conn.set("user_{}".format(user_id), p_data)
+    conn.set("authorization.{}".format(user_id), p_data)

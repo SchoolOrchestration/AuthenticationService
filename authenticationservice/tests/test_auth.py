@@ -10,7 +10,7 @@ import os
 kong_base_url = os.environ.get('KONG_BASE_URL')
 permissions = os.environ.get('REDIS_PERMISSION_HOST')
 redis_permission_host = os.environ.get('REDIS_PERMISSION_HOST')
-MOCK_USERSERVICE_RESPONSE = {
+mock_user_response = {
             'username': 'Natalie',
             'id': 3,
             'organizations': [
@@ -57,7 +57,7 @@ def test_login_success(client):
     responses.add(
         responses.POST,
         url='{}/users/login/'.format(kong_base_url),
-        json=MOCK_USERSERVICE_RESPONSE,
+        json=mock_user_response,
         status=200
     )
 
@@ -65,7 +65,7 @@ def test_login_success(client):
         'username': 'vumatel_admin',
         'password': '2c3914ea-1779-496d-a6df-c068282b370c',
         'client_id': '9n5tWkjOfFOiiwchAJtXZ7vj7G5Qlw8G',
-            'client_secret': 'k2ypqY9emqMilO948I6ZYqNgrFPK5s6i',
+        'client_secret': 'k2ypqY9emqMilO948I6ZYqNgrFPK5s6i',
     }
     response = client.simulate_post(
                 '/auth',
@@ -95,7 +95,7 @@ def test_login_success_form_data(client):
     responses.add(
         responses.POST,
         url='{}/users/login/'.format(kong_base_url),
-        json=MOCK_USERSERVICE_RESPONSE,
+        json=mock_user_response,
         status=200
     )
 
