@@ -7,6 +7,7 @@ import os
 
 KONG_BASE_URL = os.environ.get('KONG_BASE_URL')
 REDIS_PERMISSION_HOST = os.environ.get('REDIS_PERMISSION_HOST')
+PROVISION_KEY = os.environ.get('KONG_PROVISION_KEY')
 
 
 def status_string(status_code):
@@ -42,16 +43,14 @@ def get_kong_token(client_id, client_secret, user_id):
     """
     Gets a authentication token set from kong to pass back to client
     """
-    base_url = KONG_BASE_URL
-    provision_key = os.environ.get('KONG_PROVISION_KEY')
     data = {
         "client_id": client_id,
         "client_secret": client_secret,
         "grant_type": "password",
-        "provision_key": provision_key,
+        "provision_key": PROVISION_KEY,
         "authenticated_userid": user_id,
     }
-    url = "{}/users/oauth2/token".format(base_url)
+    url = "{}/users/oauth2/token".format(KONG_BASE_URL)
     return requests.post(url, data, verify=False)
 
 

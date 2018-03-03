@@ -1,5 +1,5 @@
 {
-    "title": "Authenticat user",
+    "title": "Authenticates user",
     "type": "object",
     "properties": {
         "username": {

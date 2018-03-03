@@ -3,3 +3,5 @@ deploy.sh
 docker-compose.*
 DockerFile
 release.sh
+env.dev
+.env

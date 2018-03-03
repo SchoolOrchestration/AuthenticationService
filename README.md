@@ -37,3 +37,10 @@ sh ./deploy.sh
 - [ ] `GET   /register   # get a form for registering an app`
 - [ ] `POST  /register   # create a client app`
 
+## Environment
+
+`KONG_BASE_URL`: http://kong:8000
+
+`KONG_PROVISION_KEY`: 1234
+
+`REDIS_PERMISSION_HOST`: redis

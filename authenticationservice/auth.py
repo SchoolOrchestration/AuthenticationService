@@ -1,9 +1,6 @@
 """
 Authentication endpoints
 """
-# from urllib.parse import parse_qs
-# from . import BaseResource, validate
-# from .schemas import load_schema
 from .helpers import (
     push_groups_to_redis,
     get_kong_token,
@@ -13,16 +10,12 @@ from .helpers import (
 )
 import falcon
 import json
-# import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 env = Environment(
     loader=PackageLoader('authenticationservice', 'templates'),
     autoescape=select_autoescape(['html', 'xml'])
 )
-
-# client_id = os.environ.get('APP_CLIENT_ID')
-# client_password = os.environ.get('APP_CLIENT_SECRET')
 
 
 class AuthenticationResource(object):
@@ -35,7 +28,6 @@ class AuthenticationResource(object):
         resp.content_type = 'text/html'
         resp.status = falcon.HTTP_200
 
-    # @validate(load_schema('login'))
     @staticmethod
     def on_post(req, resp):
         parsed = get_data(req)
