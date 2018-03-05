@@ -47,5 +47,5 @@ class AuthenticationResource(object):
                 'message': ('Authentication failed. Invalid username '
                             'or password')
             }
-            resp.body = json.dumps(json.dumps(result), ensure_ascii=False)
+            resp.body = json.dumps(result, ensure_ascii=False)
             resp.status = falcon.HTTP_403
